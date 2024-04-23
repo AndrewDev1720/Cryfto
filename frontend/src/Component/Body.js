@@ -4,27 +4,28 @@ import DashboardContainer from './DashboardContainer';
 import fetchCryptoData from '../API/api';
 
 const Body = () => {
-    const [cryptoData, setCryptoData] = useState([]);
+    // const [cryptoData, setCryptoData] = useState([]);
 
-    useEffect(() => {
-      const loadData = async () => {
-        const data = await fetchCryptoData();
-        setCryptoData(data);
-      };
+    // useEffect(() => {
+    //   const loadData = async () => {
+    //     const data = await fetchCryptoData();
+    //     setCryptoData(data);
+    //   };
   
-      loadData();
+    //   loadData();
   
-      // Set up polling
-      const interval = setInterval(loadData, 60000); // Poll every 60 seconds
+    //   // Set up polling
+    //   const interval = setInterval(loadData, 50000); // Poll every 50 seconds
   
-      // Clear the interval on component unmount
-      return () => clearInterval(interval);
-    }, []);
-
+    //   // Clear the interval on component unmount
+    //   return () => clearInterval(interval);
+    // }, []);
+    const loadData = async ()=> {const data = await fetchCryptoData();}
+    const cryptoData = loadData();
     return(
         <div>
             <NavigationBar username="Andrew"/>
-            <DashboardContainer data = {cryptoData}/>
+            <DashboardContainer data={cryptoData}/>
         </div>
     )
 }

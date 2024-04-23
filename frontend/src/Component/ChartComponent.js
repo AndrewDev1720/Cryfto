@@ -4,28 +4,11 @@ import 'chartjs-adapter-date-fns';
 import Paper from '@mui/material/Paper';
 import { Line } from 'react-chartjs-2';
 
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-    TimeSeriesScale, // This may need to be imported for time series
-  } from 'chart.js';
+import {Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, 
+        Title, Tooltip, Legend, TimeSeriesScale} from 'chart.js';
 
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-    TimeSeriesScale // Ensure this is registered if using a time series scale
-  );
+ChartJS.register( CategoryScale, LinearScale, PointElement, LineElement,
+                  Title, Tooltip, Legend, TimeSeriesScale );
 
 const ChartComponent = ({ data }) => {
   const [chartData, setChartData] = useState({
@@ -73,10 +56,10 @@ const ChartComponent = ({ data }) => {
         labels: data.map(d => d.time),
         datasets: [
           {
-            label: 'BTC Closing Price',
+            label: 'Closing Price',
             data: data.map(d => d.close),
             fill: false,
-            // backgroundColor: 'rgba(75,192,192,0.2)',
+            backgroundColor: 'rgba(75,192,192,0.2)',
             borderColor: 'rgba(75,192,192,1)',
             borderWidth: 1.5,
             pointRadius: 0.5, // Set point radius to 0 to remove the bubbles
