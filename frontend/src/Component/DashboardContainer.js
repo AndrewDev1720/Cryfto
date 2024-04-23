@@ -200,11 +200,11 @@ const DashboardContainer = ({ data }) => {
             balanceCoin={coinBalance} 
             latestPrice={exchangeRate} 
             currency={selectedSymbol}
-            onTransactionComplete={(newBalance, newCoinBalance) => {
-              // Update balance and coin amount after a transaction
-              setBalance(newBalance);
-              setCoinBalance(newCoinBalance);
-            }}
+            // onTransactionComplete={(newBalance, newCoinBalance) => {
+            //   // Update balance and coin amount after a transaction
+            //   setBalance(newBalance);
+            //   setCoinBalance(newCoinBalance);
+            // }}
           />
         </Grid>
 
