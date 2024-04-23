@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.08d21684.css",
-    "main.js": "/static/js/main.8af11ff4.js",
-    "static/js/453.b4bc17a8.chunk.js": "/static/js/453.b4bc17a8.chunk.js",
-    "index.html": "/index.html",
-    "main.08d21684.css.map": "/static/css/main.08d21684.css.map",
-    "main.8af11ff4.js.map": "/static/js/main.8af11ff4.js.map",
-    "453.b4bc17a8.chunk.js.map": "/static/js/453.b4bc17a8.chunk.js.map"
+    "main.css": "/Cryfto/static/css/main.08d21684.css",
+    "main.js": "/Cryfto/static/js/main.c9e98fe3.js",
+    "static/js/453.b4bc17a8.chunk.js": "/Cryfto/static/js/453.b4bc17a8.chunk.js",
+    "index.html": "/Cryfto/index.html",
+    "main.08d21684.css.map": "/Cryfto/static/css/main.08d21684.css.map",
+    "main.c9e98fe3.js.map": "/Cryfto/static/js/main.c9e98fe3.js.map",
+    "453.b4bc17a8.chunk.js.map": "/Cryfto/static/js/453.b4bc17a8.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.08d21684.css",
-    "static/js/main.8af11ff4.js"
+    "static/js/main.c9e98fe3.js"
   ]
 }
