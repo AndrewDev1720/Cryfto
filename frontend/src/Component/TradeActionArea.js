@@ -13,7 +13,7 @@ const TradeActionArea = ({ balanceUSD, balanceCoin, latestPrice, currency }) => 
     setBalance(balanceUSD);
     setCoinAmount(usdAmount / latestPrice);
     currency === 'BTC' ? setCoinBalance(balanceCoin) : setCoinBalance(0);
-  }, [balanceUSD, balanceCoin, latestPrice, currency])
+  }, [balanceUSD, balanceCoin, latestPrice, currency, usdAmount])
 
   const handleTabChange = (event, newValue) => {
     setUsdAmount('');

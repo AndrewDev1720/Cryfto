@@ -71,7 +71,7 @@ const DashboardContainer = ({ data }) => {
 
     // Clear the interval on component unmount
     return () => clearInterval(interval);
-  }, [selectedSymbol, timeRange, exchangeRate]);
+  }, [selectedSymbol, timeRange, exchangeRate, amount]);
 
   
 
