@@ -5,10 +5,10 @@ import Paper from '@mui/material/Paper';
 import { Line } from 'react-chartjs-2';
 
 import {Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, 
-        Title, Tooltip, Legend, TimeSeriesScale} from 'chart.js';
+        Title, Tooltip, Legend, TimeSeriesScale, Filler} from 'chart.js';
 
 ChartJS.register( CategoryScale, LinearScale, PointElement, LineElement,
-                  Title, Tooltip, Legend, TimeSeriesScale );
+                  Title, Tooltip, Legend, TimeSeriesScale, Filler );
 
 const ChartComponent = ({ data }) => {
   const [chartData, setChartData] = useState({
@@ -46,8 +46,15 @@ const ChartComponent = ({ data }) => {
       legend: {
         display: true,
         position: 'top',
-      }
-    }
+      },
+      filler: {
+        propagate: true
+      },
+    },
+    interaction: {
+      intersect: false, // Ensures the hover is not dependent on exact point intersection
+      mode: 'index' // 'index' will show the tooltip for all items at the same index
+    },
   });
 
   useEffect(() => {
@@ -58,11 +65,14 @@ const ChartComponent = ({ data }) => {
           {
             label: 'Closing Price',
             data: data.map(d => d.close),
-            fill: false,
+            fill: {
+              target: 'origin',
+              above: 'rgba(75,192,192,0.5)', // And blue below the origin
+            },
             backgroundColor: 'rgba(75,192,192,0.2)',
             borderColor: 'rgba(75,192,192,1)',
             borderWidth: 1.5,
-            pointRadius: 0.5, // Set point radius to 0 to remove the bubbles
+            pointRadius: 0, // Set point radius to 0 to remove the bubbles
             pointHoverRadius: 5, // S
           },
         ],

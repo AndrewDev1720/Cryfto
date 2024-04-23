@@ -1,6 +1,6 @@
 // api.js
 const fetchCryptoData = async (symbol = 'BTC') => { // Default to BTC if no symbol is provided
-  const url = `https://min-api.cryptocompare.com/data/histominute?fsym=${symbol}&tsym=USD&limit=420`;
+  const url = `https://min-api.cryptocompare.com/data/histominute?fsym=${symbol}&tsym=USD&limit=600`;
   try {
       const response = await fetch(url);
       const data = await response.json();
