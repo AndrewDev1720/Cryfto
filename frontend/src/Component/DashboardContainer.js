@@ -7,7 +7,7 @@ import TradeActionArea from './TradeActionArea';
 import fetchCryptoData from '../API/api';
 
 const DashboardContainer = ({ data }) => {
-  // Placeholder for state and functions that will handle graph changing, buy orders, etc.
+
   const [selectedSymbol, setSelectedSymbol] = useState('BTC');
   const [cryptoData, setCryptoData] = useState(data);
   const [currency, setCurrency] = useState('BTC');

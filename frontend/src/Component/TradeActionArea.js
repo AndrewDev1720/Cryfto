@@ -66,14 +66,10 @@ const TradeActionArea = ({ balanceUSD, balanceCoin, latestPrice, currency }) => 
       <Typography variant="h6" sx={{ mt: 1, mb: 1 }} align="left">
         {currency} Balance: {coinBalance}
       </Typography>
-      {/* Assuming you want to display the actual balance here */}
       <Tabs value={tab} onChange={handleTabChange} centered>
         <Tab label="Buy" />
         <Tab label="Sell" />
       </Tabs>
-      {/* <Typography variant="h6" sx={{ mt: 2 }}>
-        {tab === 0 ? 'Buy Transaction' : 'Sell Transaction'} 
-      </Typography> */}
       <TextField
         label={tab === 0 ? 'USD' : 'Coin'}
         variant="outlined"
