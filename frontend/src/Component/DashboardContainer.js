@@ -14,6 +14,7 @@ const DashboardContainer = ({ data }) => {
   const [amount, setAmount] = useState('');
   const [deposit, setDeposit] = useState('');
   const [priceInUSD, setPriceInUSD] = useState('');
+  const [timeRange, setTimeRange] = useState('360');
   const latestData = cryptoData[cryptoData.length - 1];
   const [exchangeRate, setExchangeRate] = useState(latestData ? latestData.close : 0);
 
@@ -42,6 +43,11 @@ const DashboardContainer = ({ data }) => {
     setDeposit(amount); // Convert amount to USD
   };
 
+  const onChangeTimeRange = (event) => {
+    const selectedTimeRange = event.target.value;
+    setTimeRange(selectedTimeRange);
+  }
+
   const handleDeposit = () => {
     // Assuming you have a state for the account balance and the amount to add
     setBalance((prevBalance) => prevBalance + Number(deposit));
@@ -51,20 +57,21 @@ const DashboardContainer = ({ data }) => {
 
   useEffect(() => {
     const loadData = async () => {
-      const newData = await fetchCryptoData(selectedSymbol);
+      const newData = await fetchCryptoData(selectedSymbol, timeRange);
       setCryptoData(newData);
       setExchangeRate(newData.length ? newData[newData.length - 1].close : 0);
+      setPriceInUSD(amount*exchangeRate);
     };
-
     // Load data on component mount and when selectedSymbol changes
     loadData();
+    // setPriceInUSD(amount*exchangeRate);
 
     // Set up polling
     const interval = setInterval(loadData, 50000); // Poll every 50 seconds
 
     // Clear the interval on component unmount
     return () => clearInterval(interval);
-  }, [selectedSymbol]);
+  }, [selectedSymbol, timeRange, exchangeRate]);
 
   
 
@@ -84,7 +91,7 @@ const DashboardContainer = ({ data }) => {
           >
             <TextField
               sx={{
-                width: '25%',
+                width: '15%',
                 backgroundColor: 'white',
               }}
               id="crypto-amount"
@@ -96,11 +103,11 @@ const DashboardContainer = ({ data }) => {
 
             <FormControl
               sx={{
-                width: '35%', 
+                width: '25%', 
                 backgroundColor: 'white',
               }}
             >
-              <InputLabel id="currency-label">Currency</InputLabel>
+              <InputLabel id="currency-label">Currency </InputLabel>
               <Select
                 labelId="currency-label"
                 id="currency-select"
@@ -117,7 +124,7 @@ const DashboardContainer = ({ data }) => {
 
             <TextField
               sx={{
-                width: '35%', 
+                width: '25%', 
                 backgroundColor: 'white',
               }}
               id="usd-price"
@@ -129,6 +136,29 @@ const DashboardContainer = ({ data }) => {
                 startAdornment: <InputAdornment position="start">$</InputAdornment>,
               }}
             />
+
+            <FormControl
+              sx={{
+                width: '25%', 
+                backgroundColor: 'white',
+              }}
+            >
+              <InputLabel id="timerange-label">Time Range</InputLabel>
+              <Select
+                labelId="timerange-label"
+                id="timerange-select"
+                variant="outlined"
+                value={timeRange}
+                label="Time Range"
+                onChange={onChangeTimeRange}
+              >
+                <MenuItem value="60">1 hour</MenuItem>
+                <MenuItem value="360">6 hours</MenuItem>
+                <MenuItem value="720">12 hours</MenuItem>
+                {/* Add other currencies as MenuItem components */}
+              </Select>
+            </FormControl>
+
           </Box>
           {/* Chart Component */}
           <ChartComponent data={cryptoData || data} /* pass necessary props */ />
@@ -169,7 +199,7 @@ const DashboardContainer = ({ data }) => {
             balanceUSD={balance} 
             balanceCoin={coinBalance} 
             latestPrice={exchangeRate} 
-            currency={currency}
+            currency={selectedSymbol}
             onTransactionComplete={(newBalance, newCoinBalance) => {
               // Update balance and coin amount after a transaction
               setBalance(newBalance);
