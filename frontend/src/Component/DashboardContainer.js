@@ -19,7 +19,7 @@ const DashboardContainer = ({ data }) => {
   const [exchangeRate, setExchangeRate] = useState(latestData ? latestData.close : 0);
 
   const [balance, setBalance] = useState(1000); // Example USDT balance
-  const [coinBalance, setCoinBalance] = useState(2); // Example coin amount
+  const [coinBalance, setCoinBalance] = useState(0); // Example coin amount
 
   const handleCurrencyChange = (event) => {
     setCurrency(event.target.value);
@@ -80,7 +80,7 @@ const DashboardContainer = ({ data }) => {
       <h1>Cryfto Dashboard</h1>
       <Grid container spacing={3}>
         {/* Amount and currency input Grid */}
-        <Grid item md={8}>
+        <Grid item md={8} sm = {12}>
           <Box
             sx={{
               display: 'flex',
@@ -190,7 +190,7 @@ const DashboardContainer = ({ data }) => {
             variant="contained"
             color="primary"
             onClick={handleDeposit}
-            sx={{ whiteSpace: 'nowrap' }}
+            sx={{ whiteSpace: 'nowrap' , width: '25%'}}
           >
             Deposit
           </Button>
@@ -200,11 +200,11 @@ const DashboardContainer = ({ data }) => {
             balanceCoin={coinBalance} 
             latestPrice={exchangeRate} 
             currency={selectedSymbol}
-            // onTransactionComplete={(newBalance, newCoinBalance) => {
-            //   // Update balance and coin amount after a transaction
-            //   setBalance(newBalance);
-            //   setCoinBalance(newCoinBalance);
-            // }}
+            onTransactionComplete={(newBalance, newCoinBalance) => {
+              // Update balance and coin amount after a transaction
+              setBalance(newBalance);
+              setCoinBalance(newCoinBalance);
+            }}
           />
         </Grid>
 

@@ -17,6 +17,7 @@ const ChartComponent = ({ data }) => {
 
   const [chartOptions, setChartOptions] = useState({
     responsive: true,
+    maintainAspectRatio: false,
     scales: {
       x: {
         type: 'timeseries',
@@ -81,7 +82,7 @@ const ChartComponent = ({ data }) => {
   }, [data]);
 
   return (
-    <Paper elevation={3} sx={{ borderRadius: '10px', overflow: 'hidden', backgroundColor: 'white' }}>
+    <Paper elevation={3} sx={{ borderRadius: '10px', overflow: 'hidden', backgroundColor: 'white', minHeight : '380px' }}>
       <Line data={chartData} options={chartOptions} />
     </Paper>
   );

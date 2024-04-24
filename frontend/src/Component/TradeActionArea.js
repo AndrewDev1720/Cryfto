@@ -1,8 +1,8 @@
 // TradeActionArea.js
 import React, { useState, useEffect } from 'react';
-import { Box, Tab, Tabs, Typography, TextField, Button, Paper } from '@mui/material';
+import { Tab, Tabs, Typography, TextField, Button, Paper } from '@mui/material';
 
-const TradeActionArea = ({ balanceUSD, balanceCoin, latestPrice, currency }) => {
+const TradeActionArea = ({ balanceUSD, balanceCoin, latestPrice, currency, onTransactionComplete }) => {
   const [tab, setTab] = useState(0);
   const [usdAmount, setUsdAmount] = useState('');
   const [coinAmount, setCoinAmount] = useState('');
@@ -14,6 +14,11 @@ const TradeActionArea = ({ balanceUSD, balanceCoin, latestPrice, currency }) => 
     setCoinAmount(usdAmount / latestPrice);
     currency === 'BTC' ? setCoinBalance(balanceCoin) : setCoinBalance(0);
   }, [balanceUSD, balanceCoin, latestPrice, currency, usdAmount])
+
+  useEffect(() => {
+    console.log(balance);
+    onTransactionComplete(balance, coinBalance);
+  }, [balance, coinBalance])
 
   const handleTabChange = (event, newValue) => {
     setUsdAmount('');
@@ -34,7 +39,6 @@ const TradeActionArea = ({ balanceUSD, balanceCoin, latestPrice, currency }) => 
   };
 
   const handlePurchase = () => {
-    console.log(balanceCoin);
     if (tab === 0 && usdAmount > balanceUSD) {
       alert("Insufficient USD balance.");
       return;
