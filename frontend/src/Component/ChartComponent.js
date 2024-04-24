@@ -57,7 +57,6 @@ const ChartComponent = ({ data }) => {
       mode: 'index' // 'index' will show the tooltip for all items at the same index
     },
   });
-
   useEffect(() => {
     if (data.length > 0) {
       setChartData({
@@ -80,7 +79,7 @@ const ChartComponent = ({ data }) => {
       });
     }
   }, [data]);
-
+  //console.log(typeof(data[0].time))
   return (
     <Paper elevation={3} sx={{ borderRadius: '10px', overflow: 'hidden', backgroundColor: 'white', minHeight : '380px' }}>
       <Line data={chartData} options={chartOptions} />

@@ -4,6 +4,7 @@ import DashboardContainer from './DashboardContainer';
 import fetchCryptoData from '../API/api';
 
 const Body = () => {
+    
     const loadData = async ()=> { await fetchCryptoData();}
     const cryptoData = loadData();
     return(

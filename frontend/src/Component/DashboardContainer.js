@@ -5,11 +5,13 @@ import {Container, Grid, Button, TextField, InputAdornment, MenuItem,
 import ChartComponent from './ChartComponent';
 import TradeActionArea from './TradeActionArea';
 import fetchCryptoData from '../API/api';
-
+import { socket } from '../API/socket';
 const DashboardContainer = ({ data }) => {
-
+  
   const [selectedSymbol, setSelectedSymbol] = useState('BTC');
   const [cryptoData, setCryptoData] = useState(data);
+  const [coindata, setCoinData] = useState([]);
+  const [predict, setPredict] = useState([]);
   const [currency, setCurrency] = useState('BTC');
   const [amount, setAmount] = useState('');
   const [deposit, setDeposit] = useState('');
@@ -56,6 +58,34 @@ const DashboardContainer = ({ data }) => {
   };
 
   useEffect(() => {
+    const mapping = {
+      'BTC': 'btc',
+      'Etherium': 'eth',
+    }
+    socket.on(mapping[selectedSymbol], (newData) => {
+      // console.log(newData[0]);
+      newData = newData.map((d) => {
+        d = JSON.parse(d);
+        return {
+          time: new Date(d.time*1000),
+          close: d.close,
+        };
+      }).sort((a, b) => a.time - b.time);
+      //console.log(newData);
+      setCoinData(newData);
+    });
+    socket.on('predict', (newData) => {
+      newData = newData.map((d) => {
+        d = JSON.parse(d);
+        return {
+          time: new Date(d.time*1000),
+          close: d.close,
+        };
+      }).sort((a, b) => a.time - b.time);
+      setPredict(newData);
+    });
+
+
     const loadData = async () => {
       const newData = await fetchCryptoData(selectedSymbol, timeRange);
       setCryptoData(newData);
@@ -68,9 +98,13 @@ const DashboardContainer = ({ data }) => {
 
     // Set up polling
     const interval = setInterval(loadData, 50000); // Poll every 50 seconds
-
+    //console.log(coindata[0])
     // Clear the interval on component unmount
-    return () => clearInterval(interval);
+    return () => {
+      socket.off(mapping[selectedSymbol]);
+      clearInterval(interval);
+    }
+
   }, [selectedSymbol, timeRange, exchangeRate, amount]);
 
   
@@ -78,6 +112,7 @@ const DashboardContainer = ({ data }) => {
   return (
     <Container maxWidth="lg">
       <h1>Cryfto Dashboard</h1>
+      <p>{data.length}</p>
       <Grid container spacing={3}>
         {/* Amount and currency input Grid */}
         <Grid item md={8} sm = {12}>
@@ -161,7 +196,8 @@ const DashboardContainer = ({ data }) => {
 
           </Box>
           {/* Chart Component */}
-          <ChartComponent data={cryptoData || data} /* pass necessary props */ />
+          {/* <ChartComponent data={cryptoData || data} /> */}
+          <ChartComponent data={coindata.filter( d => d.time >= new Date( new Date().setMinutes( new Date().getMinutes()-timeRange)) ) || data } />
         </Grid>
 
 
@@ -210,6 +246,7 @@ const DashboardContainer = ({ data }) => {
 
         {/* Order Form Grid */}
       </Grid>
+      
     </Container>
   );
 };
