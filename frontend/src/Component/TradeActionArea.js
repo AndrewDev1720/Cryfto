@@ -12,11 +12,13 @@ const TradeActionArea = ({ balanceUSD, balanceCoin, latestPrice, currency, onTra
   useEffect (() => {
     setBalance(balanceUSD);
     setCoinAmount(usdAmount / latestPrice);
-    currency === 'BTC' ? setCoinBalance(balanceCoin) : setCoinBalance(0);
+    if(currency === 'BTC'){
+      setCoinBalance(balanceCoin)
+    }
   }, [balanceUSD, balanceCoin, latestPrice, currency, usdAmount])
 
   useEffect(() => {
-    console.log(balance);
+    console.log(coinBalance);
     onTransactionComplete(balance, coinBalance);
   }, [balance, coinBalance])
 
@@ -68,7 +70,7 @@ const TradeActionArea = ({ balanceUSD, balanceCoin, latestPrice, currency, onTra
         Account Balance: $ {balance}
       </Typography>
       <Typography variant="h6" sx={{ mt: 1, mb: 1 }} align="left">
-        {currency} Balance: {coinBalance}
+        {currency} Balance: {currency === 'BTC' ? coinBalance.toFixed(8) : 0}
       </Typography>
       <Tabs value={tab} onChange={handleTabChange} centered>
         <Tab label="Buy" />

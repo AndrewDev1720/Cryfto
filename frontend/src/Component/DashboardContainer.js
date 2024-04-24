@@ -14,7 +14,7 @@ const DashboardContainer = ({ data }) => {
   const [amount, setAmount] = useState('');
   const [deposit, setDeposit] = useState('');
   const [priceInUSD, setPriceInUSD] = useState('');
-  const [timeRange, setTimeRange] = useState('360');
+  const [timeRange, setTimeRange] = useState('720');
   const latestData = cryptoData[cryptoData.length - 1];
   const [exchangeRate, setExchangeRate] = useState(latestData ? latestData.close : 0);
 
