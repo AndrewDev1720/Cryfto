@@ -12,6 +12,26 @@ ChartJS.register( CategoryScale, LinearScale, PointElement, LineElement,
 
 //TODO: Add a new dataset for the predicted price
 const ChartComponent = ({ data,predict }) => {
+  function expandData(data, start, end) {
+    const expandedArray = [];
+    for (let d = new Date(start); d <= end; d.setMinutes(d.getMinutes() + 1)) {
+      const existingItem = data.find(item => item.time.getTime() === d.getTime());
+      if (existingItem) {
+        expandedArray.push(existingItem);
+      } else {
+        expandedArray.push({ time: new Date(d), value: null });
+      }
+    }
+    return expandedArray;
+  }
+
+  if (predict != null && predict.length > 0) {
+    var start = data[0].time
+    var end = predict[predict.length-1].time
+    data = expandData(data, start, end)
+    predict = expandData(predict, start, end)
+    
+  }
   const [chartData, setChartData] = useState({
     datasets: [],
   });
@@ -59,6 +79,7 @@ const ChartComponent = ({ data,predict }) => {
     },
   });
   useEffect(() => {
+    console.log(data)
     if (data.length > 0) {
       setChartData({
         labels: data.map(d => d.time),
@@ -76,6 +97,20 @@ const ChartComponent = ({ data,predict }) => {
             pointRadius: 0, // Set point radius to 0 to remove the bubbles
             pointHoverRadius: 5, // S
           },
+          {
+            label: 'Predict Price',
+            data: predict.map(d => d.value-1000),
+            // fill: {
+            //   target: 'origin',
+            //   above: 'rgba(5,132,72,0.5)', // And blue below the origin
+            // },
+            // backgroundColor: 'rgba(75,12,192,0.2)',
+            borderColor: 'rgba(192,75,0,1)',
+            borderWidth: 1.5,
+            pointRadius: 0, // Set point radius to 0 to remove the bubbles
+            pointHoverRadius: 5, // S
+          },
+
         ],
       });
     }
@@ -88,7 +123,6 @@ const ChartComponent = ({ data,predict }) => {
     </Paper>
     {predict != null && predict.length > 0 ? (predict) : (<p>loading prediction</p>)}
   </div>
-    
   );
 };
 

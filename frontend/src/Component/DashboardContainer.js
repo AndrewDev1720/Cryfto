@@ -85,16 +85,17 @@ const DashboardContainer = ({ data }) => {
       setEthdata(newData);
     });
     socket.on('predict', (newData) => {
+      console.log(newData);
       newData = newData.map((d) => {
         d = JSON.parse(d);
         return {
           time: new Date(d.time*1000),
-          close: d.close,
+          close: d.value,
         };
       }).sort((a, b) => a.time - b.time);
       setPredict(newData);
     });
-
+    
 
     const loadData = async () => {
       const newData = await fetchCryptoData(selectedSymbol, timeRange);
@@ -209,10 +210,9 @@ const DashboardContainer = ({ data }) => {
           </Box>
           {/* Chart Component */}
           {/* <ChartComponent data={cryptoData || data} /> */}
-          {
-          (selectedSymbol === 'BTC') ?
+          {(selectedSymbol === 'BTC') ?
           (<ChartComponent 
-          predict = {predict}
+          predict = {data}
           data={btcdata.filter( d => d.time >= new Date(new Date().setMinutes( new Date().getMinutes()-timeRange)) ) || data }
            />) 
            :
