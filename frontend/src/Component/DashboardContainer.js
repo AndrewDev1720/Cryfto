@@ -10,7 +10,8 @@ const DashboardContainer = ({ data }) => {
   
   const [selectedSymbol, setSelectedSymbol] = useState('BTC');
   const [cryptoData, setCryptoData] = useState(data);
-  const [coindata, setCoinData] = useState([]);
+  const [btcdata, setBtcdata] = useState([]);
+  const [ethdata, setEthdata] = useState([]);
   const [predict, setPredict] = useState([]);
   const [currency, setCurrency] = useState('BTC');
   const [amount, setAmount] = useState('');
@@ -58,11 +59,8 @@ const DashboardContainer = ({ data }) => {
   };
 
   useEffect(() => {
-    const mapping = {
-      'BTC': 'btc',
-      'Etherium': 'eth',
-    }
-    socket.on(mapping[selectedSymbol], (newData) => {
+    
+    socket.on('btc', (newData) => {
       // console.log(newData[0]);
       newData = newData.map((d) => {
         d = JSON.parse(d);
@@ -72,7 +70,19 @@ const DashboardContainer = ({ data }) => {
         };
       }).sort((a, b) => a.time - b.time);
       //console.log(newData);
-      setCoinData(newData);
+      setBtcdata(newData);
+    });
+    socket.on('eth', (newData) => {
+      // console.log(newData[0]);
+      newData = newData.map((d) => {
+        d = JSON.parse(d);
+        return {
+          time: new Date(d.time*1000),
+          close: d.close,
+        };
+      }).sort((a, b) => a.time - b.time);
+      //console.log(newData);
+      setEthdata(newData);
     });
     socket.on('predict', (newData) => {
       newData = newData.map((d) => {
@@ -98,10 +108,12 @@ const DashboardContainer = ({ data }) => {
 
     // Set up polling
     const interval = setInterval(loadData, 50000); // Poll every 50 seconds
-    //console.log(coindata[0])
+    //console.log(btcdata[0])
     // Clear the interval on component unmount
     return () => {
-      socket.off(mapping[selectedSymbol]);
+      socket.off('btc');
+      socket.off('eth')
+      socket.off('predict');
       clearInterval(interval);
     }
 
@@ -152,7 +164,7 @@ const DashboardContainer = ({ data }) => {
               >
                 <MenuItem value="BTC">BTC</MenuItem>
                 <MenuItem value="ETH">Etherium</MenuItem>
-                <MenuItem value="SOL">Solana</MenuItem>
+                {/* <MenuItem value="SOL">Solana</MenuItem> */}
                 {/* Add other currencies as MenuItem components */}
               </Select>
             </FormControl>
@@ -197,7 +209,15 @@ const DashboardContainer = ({ data }) => {
           </Box>
           {/* Chart Component */}
           {/* <ChartComponent data={cryptoData || data} /> */}
-          <ChartComponent data={coindata.filter( d => d.time >= new Date( new Date().setMinutes( new Date().getMinutes()-timeRange)) ) || data } />
+          {
+          (selectedSymbol === 'BTC') ?
+          (<ChartComponent 
+          predict = {predict}
+          data={btcdata.filter( d => d.time >= new Date(new Date().setMinutes( new Date().getMinutes()-timeRange)) ) || data }
+           />) 
+           :
+           (<ChartComponent data = {ethdata.filter( d => d.time >= new Date(new Date().setMinutes( new Date().getMinutes()-timeRange)) ) || data } />)
+          }
         </Grid>
 
 

@@ -10,11 +10,12 @@ import {Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement,
 ChartJS.register( CategoryScale, LinearScale, PointElement, LineElement,
                   Title, Tooltip, Legend, TimeSeriesScale, Filler );
 
-const ChartComponent = ({ data }) => {
+//TODO: Add a new dataset for the predicted price
+const ChartComponent = ({ data,predict }) => {
   const [chartData, setChartData] = useState({
     datasets: [],
   });
-
+  
   const [chartOptions, setChartOptions] = useState({
     responsive: true,
     maintainAspectRatio: false,
@@ -81,9 +82,13 @@ const ChartComponent = ({ data }) => {
   }, [data]);
   //console.log(typeof(data[0].time))
   return (
+  <div>
     <Paper elevation={3} sx={{ borderRadius: '10px', overflow: 'hidden', backgroundColor: 'white', minHeight : '380px' }}>
       <Line data={chartData} options={chartOptions} />
     </Paper>
+    {predict != null && predict.length > 0 ? (predict) : (<p>loading prediction</p>)}
+  </div>
+    
   );
 };
 
