@@ -12,7 +12,7 @@ const DashboardContainer = ({ data }) => {
   const [cryptoData, setCryptoData] = useState(data);
   const [btcdata, setBtcdata] = useState([]);
   const [ethdata, setEthdata] = useState([]);
-  const [predict, setPredict] = useState([]);
+  const [predictdata, setPredictdata] = useState([]);
   const [currency, setCurrency] = useState('BTC');
   const [amount, setAmount] = useState('');
   const [deposit, setDeposit] = useState('');
@@ -59,7 +59,7 @@ const DashboardContainer = ({ data }) => {
   };
 
   useEffect(() => {
-    
+
     socket.on('btc', (newData) => {
       // console.log(newData[0]);
       newData = newData.map((d) => {
@@ -81,19 +81,22 @@ const DashboardContainer = ({ data }) => {
           close: d.close,
         };
       }).sort((a, b) => a.time - b.time);
-      //console.log(newData);
+      console.log(newData);
       setEthdata(newData);
     });
     socket.on('predict', (newData) => {
-      console.log(newData);
+      newData = JSON.parse(newData[newData.length-1]);
+      newData = newData.data;
+      
       newData = newData.map((d) => {
-        d = JSON.parse(d);
         return {
           time: new Date(d.time*1000),
           close: d.value,
         };
       }).sort((a, b) => a.time - b.time);
-      setPredict(newData);
+      console.log(newData);
+      setPredictdata(newData);
+      
     });
     
 
@@ -106,7 +109,6 @@ const DashboardContainer = ({ data }) => {
     // Load data on component mount and when selectedSymbol changes
     loadData();
     // setPriceInUSD(amount*exchangeRate);
-
     // Set up polling
     const interval = setInterval(loadData, 50000); // Poll every 50 seconds
     //console.log(btcdata[0])
@@ -118,7 +120,7 @@ const DashboardContainer = ({ data }) => {
       clearInterval(interval);
     }
 
-  }, [selectedSymbol, timeRange, exchangeRate, amount]);
+  }, [selectedSymbol, timeRange, exchangeRate, amount, deposit, predictdata, btcdata, ethdata]);
 
   
 
@@ -212,11 +214,14 @@ const DashboardContainer = ({ data }) => {
           {/* <ChartComponent data={cryptoData || data} /> */}
           {(selectedSymbol === 'BTC') ?
           (<ChartComponent 
-          predict = {data}
-          data={btcdata.filter( d => d.time >= new Date(new Date().setMinutes( new Date().getMinutes()-timeRange)) ) || data }
+          predict={predictdata}
+          data={btcdata.filter( d => d.time >= new Date(new Date().setMinutes( new Date().getMinutes()-timeRange)) )}
            />) 
            :
-           (<ChartComponent data = {ethdata.filter( d => d.time >= new Date(new Date().setMinutes( new Date().getMinutes()-timeRange)) ) || data } />)
+           (<ChartComponent 
+            data = {ethdata.filter( d => d.time >= new Date(new Date().setMinutes( new Date().getMinutes()-timeRange)) ) } 
+            predict={[]}
+            />)
           }
         </Grid>
 
